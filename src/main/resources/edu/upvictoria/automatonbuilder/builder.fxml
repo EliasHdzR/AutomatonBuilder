@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.upvictoria.automatonbuilder.BuilderController">
+    <ToolBar fx:id="toolBar" prefHeight="41.0" prefWidth="600.0">
+        <TextField fx:id="cadenaEntrada" focusTraversable="false" promptText="Cadena de Entrada" />
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#execAutomaton">
+            <graphic>
+                <ImageView>
+                    <Image url="@images/play-16.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Probar Automata"/>
+            </tooltip>
+        </Button>
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setMovingShapesStatus">
+            <tooltip>
+                <Tooltip text="Mover Figuras"/>
+            </tooltip>
+            <graphic>
+                <ImageView>
+                    <Image url="@images/hand-16.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0"/>
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setOpenFigureMenuStatus">
+            <tooltip>
+                <Tooltip text="Editar Propiedades"/>
+            </tooltip>
+            <graphic>
+                <ImageView>
+                    <Image url="@images/pencil-16.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setDeleteFigureStatus">
+            <tooltip>
+                <Tooltip text="Eliminar Figuras"/>
+            </tooltip>
+            <graphic>
+                <ImageView>
+                    <Image url="@images/eraser-16.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0"/>
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setDrawStateStatus">
+            <tooltip>
+                <Tooltip text="Dibujar Estado"/>
+            </tooltip>
+            <graphic>
+                <ImageView>
+                    <Image url="@images/circle-16.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setDrawTransitionStatus">
+            <tooltip>
+                <Tooltip text="Dibujar Transicion"/>
+            </tooltip>
+            <graphic>
+                <ImageView>
+                    <Image url="@images/line-16.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </ToolBar>
+    <ScrollPane VBox.vgrow="ALWAYS">
+        <StackPane>
+            <Pane opacity="0.14" prefHeight="1080.0" prefWidth="1920.0"
+                  style="-fx-background-color: #FFFFFF, linear-gradient(from 0.5px 0.0px to 10.5px  0.0px, repeat, black 1%, transparent 1%),         linear-gradient(from 0.0px 0.5px to  0.0px 10.5px, repeat, black 1%, transparent 1%);"/>
+            <Canvas fx:id="canvas" height="1080.0" layoutX="-371.0" layoutY="-481.0" width="1920.0"/>
+        </StackPane>
+    </ScrollPane>
+</VBox>

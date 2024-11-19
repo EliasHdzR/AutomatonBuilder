@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="203.0" maxWidth="346.0" minHeight="126.0" minWidth="346.0" prefHeight="203.0" prefWidth="346.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <Label layoutX="42.0" layoutY="23.0" text="Nombre"/>
+    <TextField fx:id="nombreEstado" layoutX="42.0" layoutY="44.0" prefHeight="29.0" prefWidth="252.0"/>
+    <Button  fx:id="btnGuardar" layoutX="134.0" layoutY="140.0" mnemonicParsing="false" text="Guardar" onAction="#guardarDatos"/>
+    <CheckBox fx:id="checkBoxInicio" layoutX="42.0" layoutY="102.0" mnemonicParsing="false" text="Inicio"/>
+    <CheckBox fx:id="checkBoxAceptado" layoutX="110.0" layoutY="102.0" mnemonicParsing="false" text="Aceptado"/>
+</Pane>

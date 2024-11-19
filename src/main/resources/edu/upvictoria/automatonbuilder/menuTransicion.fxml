@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="282.0" maxWidth="346.0" minHeight="167.0" minWidth="225.0" prefHeight="167.0" prefWidth="225.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <Label layoutX="59.0" layoutY="36.0" text="Entradas"/>
+    <RadioButton fx:id="radioButtonA" layoutX="47.0" layoutY="65.0" mnemonicParsing="false" text="a"/>
+    <RadioButton fx:id="radioButtonB" layoutX="86.0" layoutY="65.0" mnemonicParsing="false" text="b" />
+    <Button fx:id="btnGuardar" layoutX="79.0" layoutY="108.0" mnemonicParsing="false" text="Guardar" onAction="#guardarDatos"/>
+</Pane>

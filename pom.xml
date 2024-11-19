@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                edu.upvictoria.automatonbuilder/edu.upvictoria.automatonbuilder.HelloApplication
+                                edu.upvictoria.automatonbuilder/edu.upvictoria.automatonbuilder.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
