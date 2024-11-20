@@ -53,6 +53,17 @@ public class State implements Figure {
         return transitionList;
     }
 
+    public List<Transition> getOwnTransitionList() {
+        List<Transition> transitionList = new ArrayList<>();
+        for (Transition transition : this.transitionList) {
+            if (transition.getEstadoInicio() == this){
+                transitionList.add(transition);
+            }
+        }
+
+        return transitionList;
+    }
+
     public String getSymbol() {
         return symbol;
     }

@@ -8,7 +8,7 @@
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="edu.upvictoria.automatonbuilder.BuilderController">
     <ToolBar fx:id="toolBar" prefHeight="41.0" prefWidth="600.0">
-        <TextField fx:id="cadenaEntrada" focusTraversable="false" promptText="Cadena de Entrada" />
+        <TextField fx:id="cadenaInput" focusTraversable="false" promptText="Cadena de Entrada"/>
         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#execAutomaton">
             <graphic>
                 <ImageView>
@@ -19,6 +19,8 @@
                 <Tooltip text="Probar Automata"/>
             </tooltip>
         </Button>
+        <Label fx:id="labelAviso" prefHeight="19.0" prefWidth="200.0" textFill="#d72222"/>
+        <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0"/>
         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" onAction="#setMovingShapesStatus">
             <tooltip>
                 <Tooltip text="Mover Figuras"/>
@@ -72,11 +74,15 @@
             </graphic>
         </Button>
     </ToolBar>
-    <ScrollPane VBox.vgrow="ALWAYS">
-        <StackPane>
-            <Pane opacity="0.14" prefHeight="1080.0" prefWidth="1920.0"
-                  style="-fx-background-color: #FFFFFF, linear-gradient(from 0.5px 0.0px to 10.5px  0.0px, repeat, black 1%, transparent 1%),         linear-gradient(from 0.0px 0.5px to  0.0px 10.5px, repeat, black 1%, transparent 1%);"/>
-            <Canvas fx:id="canvas" height="1080.0" layoutX="-371.0" layoutY="-481.0" width="1920.0"/>
-        </StackPane>
-    </ScrollPane>
+    <VBox prefHeight="1000.0" prefWidth="600.0">
+        <ScrollPane VBox.vgrow="ALWAYS">
+            <StackPane>
+                <Pane opacity="0.14" prefHeight="1080.0" prefWidth="1920.0"
+                      style="-fx-background-color: #FFFFFF, linear-gradient(from 0.5px 0.0px to 10.5px  0.0px, repeat, black 1%, transparent 1%), linear-gradient(from 0.0px 0.5px to  0.0px 10.5px, repeat, black 1%, transparent 1%);">
+                </Pane>
+                <Canvas fx:id="canvas" height="1080.0" layoutX="-371.0" layoutY="-481.0" width="1920.0"/>
+            </StackPane>
+        </ScrollPane>
+        <TextArea fx:id="textResultado" disable="true" editable="false" maxWidth="1920.0" prefHeight="600.0" prefWidth="600.0"/>
+    </VBox>
 </VBox>

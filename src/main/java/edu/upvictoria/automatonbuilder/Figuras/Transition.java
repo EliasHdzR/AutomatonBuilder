@@ -35,7 +35,7 @@ public class Transition implements Figure {
      * @return true si el estado es igual a this.estado, igual con el estado2
      */
     public boolean doesExist(State estadoInicio, State estadoFinal) {
-        return (estadoInicio == this.estadoInicio && estadoFinal == this.estadoFinal) || (estadoFinal == this.estadoInicio && estadoInicio == this.estadoFinal);
+        return estadoInicio == this.estadoInicio && estadoFinal == this.estadoFinal;
     }
 
     public void changeCoords(State estado, double x, double y) {
@@ -70,6 +70,14 @@ public class Transition implements Figure {
         this.entradaB = entradaB;
     }
 
+    public State getEstadoInicio() {
+        return estadoInicio;
+    }
+
+    public State getEstadoFinal() {
+        return estadoFinal;
+    }
+
     /************************************************
      ********** FUNCIONES DE LA INTERFAZ ************
      ***********************************************/
@@ -93,8 +101,8 @@ public class Transition implements Figure {
             gc.strokeOval(startX - 5, startY - loopRadius, 15, loopRadius);
 
             //TODO RENDERIZAR LABEL CORRECTAMENTE
-            midX = startY - loopRadius;
-            midY = startX - 5;
+            midX = startX;
+            midY = startY - loopRadius;
         } else {
             gc.setLineWidth(2);
             gc.strokeLine(startX, startY, endX, endY);

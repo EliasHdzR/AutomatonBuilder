@@ -10,6 +10,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
@@ -32,7 +34,9 @@ public class BuilderController {
     // elementos de la gui
     @FXML private Canvas canvas;
     @FXML private ToolBar toolBar;
-    @FXML private TextField cadenaEntrada;
+    @FXML private TextField cadenaInput;
+    @FXML private Label labelAviso;
+    @FXML private TextArea textResultado;
 
     @FXML
     public void initialize() {
@@ -44,7 +48,135 @@ public class BuilderController {
      ************************************/
     @FXML
     protected void execAutomaton(){
-        
+        labelAviso.setText("");
+        String cadenaEntrada = cadenaInput.getText().toLowerCase();
+
+        if(!cadenaEntrada.matches("^[ab]+$")){
+            labelAviso.setText("Cadena Inválida");
+            return;
+        }
+
+        boolean validStart = false;
+        State estadoInicial = null;
+        for(Figure figure : figures){
+            if(figure instanceof State){
+                if(validStart && ((State) figure).isStart()){
+                    labelAviso.setText("Hay más de un estado inicial");
+                    return;
+                }
+
+                if(((State) figure).isStart()){
+                    validStart = true;
+                    estadoInicial = (State) figure;
+                }
+            }
+        }
+
+        if (!validStart) {
+            labelAviso.setText("Inicio no definido");
+            return;
+        }
+
+        String[] letras = cadenaEntrada.split("");
+        List<List<State>> rutas = new ArrayList<>();
+
+        // Ejecutar la evaluación del autómata
+        boolean resultado = evaluaCadena(estadoInicial, letras, 0, new ArrayList<>(), rutas);
+
+        // Imprimir las rutas y el estado final (aceptado o rechazado)
+        StringBuilder resultadoFinal = new StringBuilder();
+        for (List<State> ruta : rutas) {
+            resultadoFinal.append("Ruta: ");
+            for (State estado : ruta) {
+                resultadoFinal.append(estado.getSymbol()).append(" -> ");
+            }
+            resultadoFinal.setLength(resultadoFinal.length() - 4); // Eliminar el último " -> "
+            resultadoFinal.append(" | Resultado: ")
+                    .append(ruta.getLast().isAccepted() ? "Aceptado" : "Rechazado")
+                    .append("\n");
+        }
+
+        // Mostrar el resultado en la interfaz
+        textResultado.setText(resultadoFinal.toString());
+    }
+
+    /**
+     * Método recursivo para evaluar la cadena en un AFND.
+     *
+     * @param estadoActual El estado actual en el que estamos evaluando.
+     * @param cadena       La cadena dividida en caracteres.
+     * @param indice       El índice del carácter actual a evaluar.
+     * @param rutaActual   La ruta actual recorrida.
+     * @param rutas        Todas las rutas exploradas.
+     * @return True si al menos una ruta acepta la cadena, False en caso contrario.
+     */
+    private boolean evaluaCadena(State estadoActual, String[] cadena, int indice, List<State> rutaActual, List<List<State>> rutas) {
+        // Agregar el estado actual a la ruta
+        rutaActual.add(estadoActual);
+        // Caso base: si hemos consumido toda la cadena
+        if (indice == cadena.length) {
+            rutas.add(new ArrayList<>(rutaActual)); // Guardar la ruta recorrida
+            return estadoActual.isAccepted(); // Verificar si estamos en un estado de aceptación
+        }
+
+        boolean resultado = false;
+        String letra = cadena[indice]; // Obtener la letra actual de la cadena
+
+        // Evaluar las transiciones desde el estado actual
+        List<Transition> transicionesAPosibles = new ArrayList<>();
+        List<Transition> transicionesBPosibles = new ArrayList<>();
+
+        for (Transition transicion : estadoActual.getOwnTransitionList()) {
+            // Verificar si la transición acepta la letra actual
+            if (letra.equals("a") && transicion.isEntradaA()){
+                transicionesAPosibles.add(transicion);
+            }
+
+            if (letra.equals("b") && transicion.isEntradaB()) {
+                transicionesBPosibles.add(transicion);
+            }
+        }
+
+        // Si hay más de una transición, es una bifurcación
+        if (transicionesAPosibles.size() > 1) {
+            // Para cada bifurcación, crear una nueva ruta
+            for (Transition transicion : transicionesAPosibles) {
+                List<State> nuevaRuta = new ArrayList<>(rutaActual);
+                if (evaluaCadena(transicion.getEstadoFinal(), cadena, indice + 1, nuevaRuta, rutas)) {
+                    resultado = true;
+                }
+            }
+        }
+
+        if (transicionesBPosibles.size() > 1) {
+            // Para cada bifurcación, crear una nueva ruta
+            for (Transition transicion : transicionesBPosibles) {
+                List<State> nuevaRuta = new ArrayList<>(rutaActual);
+                if (evaluaCadena(transicion.getEstadoFinal(), cadena, indice + 1, nuevaRuta, rutas)) {
+                    resultado = true;
+                }
+            }
+        }
+
+        if (transicionesAPosibles.size() == 1) {
+            // Si hay solo una transición, seguirla normalmente
+            Transition transicion = transicionesAPosibles.getFirst();
+            List<State> nuevaRuta = new ArrayList<>(rutaActual);
+            if (evaluaCadena(transicion.getEstadoFinal(), cadena, indice + 1, nuevaRuta, rutas)) {
+                resultado = true;
+            }
+        }
+
+        if (transicionesBPosibles.size() == 1) {
+            // Si hay solo una transición, seguirla normalmente
+            Transition transicion = transicionesBPosibles.getFirst();
+            List<State> nuevaRuta = new ArrayList<>(rutaActual);
+            if (evaluaCadena(transicion.getEstadoFinal(), cadena, indice + 1, nuevaRuta, rutas)) {
+                resultado = true;
+            }
+        }
+
+        return resultado;
     }
 
     @FXML
@@ -190,6 +322,10 @@ public class BuilderController {
         double y = mouseEvent.getY();
         Figure figure = getFigureAt(x, y);
 
+        if(figure == null) {
+            return;
+        }
+
         // si es un estado tmb hay que borrar todas las aristas que van hacia este nodo
         if (figure instanceof State estado) {
             List<Transition> nodoTransitionList = estado.getTransitionList();
@@ -210,10 +346,10 @@ public class BuilderController {
         canvas.setOnMouseEntered(me -> scene.setCursor(Cursor.CROSSHAIR));
         canvas.setOnMouseExited(me -> scene.setCursor(Cursor.DEFAULT));
 
-        canvas.setOnMouseClicked(this::drawNode);
+        canvas.setOnMouseClicked(this::drawState);
     }
 
-    private void drawNode(MouseEvent mouseEvent) {
+    private void drawState(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
 
@@ -259,7 +395,7 @@ public class BuilderController {
         //recuperamos la figura en la que se dejó de mantener presionado el clic izquirdo
         Figure fig2 = getFigureAt(mouseEvent.getX(), mouseEvent.getY());
 
-        // si esa figura no es un nodo o es el que ya elegimos entonces deja de dibujar el borrador de arista
+        // si esa figura no es un nodo entonces deja de dibujar el borrador de arista
         if (!(fig2 instanceof State estado2) || selectedState == null) {
             initialX = null;
             initialY = null;
